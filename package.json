@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "nodemon",
     "build": "tsc",
-    "start": "node dist/main"
+    "start": "node dist/main",
+    "run": "npm run build && npm run start"
   },
   "devDependencies": {
     "@playwright/test": "^1.46.0",

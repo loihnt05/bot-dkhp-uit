@@ -1,24 +1,40 @@
-# Simple TypeScript Starter
+# Bot đăng ký học phần UIT
 
-> Bare minimum TypeScript project template to get started quickly.
+## Dependencies
 
-A bare minimum, no-frills TypeScript starter template with development/production scripts and linting included.
+- Node v20 hoặc hơn
 
-- Nodemon + `ts-node` for development
-- `tsc` for building production distribution
+## Bắt đầu
 
-Entry file: `src/main.ts`.
+1. Tạo file config
 
-## Get Started
+```sh
+cp example.dkhp.config.json dkhp.config.json
+```
 
-There are two branches: [**`main`**](https://github.com/plibither8/typescript/tree/main/) and [**`esm`**](https://github.com/plibither8/typescript/tree/esm/). The `main` branch uses the CommonJS module system, whereas the ESM branch uses the ESM module system.
+2. Chỉnh sửa nội dung file config
 
-1. Create a repo from this template and locally clone it. Or... run `npx degit plibither8/typescript` or `npx degit plibither8/typescript#esm` to get it directly onto your machine.
-2. `npm install` or `pnpm install` or `yarn`, as per your taste
-3. `npm run dev` for running in development mode (watches files)
-4. `npm run build` for building production files
-5. `npm run start` for running production-built files
+```jsonc
+{
+    "username": "23520000", // MSSV
+    "password": "your extremely secure password", // MK
+    "classes": [ // Mã lớp cần đăng ký
+        "SE347.P12",
+        "SE347.P12.1",
+        "SS006.P18",
+        "SS008.P12",
+        "or other any class code"
+    ]
+}
+```
 
-## License
+3. Bắt đầu chạy
 
-[MIT](LICENSE)
+```sh
+npm run run
+```
+
+## Tính năng
+
+- [ ] Tự động bắt đầu khi đúng thời gian
+- [ ] Tự động exit khi thành công
