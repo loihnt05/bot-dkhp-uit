@@ -28,10 +28,11 @@ cp example.dkhp.config.json dkhp.config.json
 }
 ```
 
-3. Bắt đầu chạy
+
+4. Bắt đầu chạy
 
 ```sh
-npm run run
+npm install && npm run run
 ```
 
 ## Tính năng
