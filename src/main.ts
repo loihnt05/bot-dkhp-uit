@@ -56,7 +56,7 @@ async function main() {
   await page.goto("https://dkhp.uit.edu.vn/app/reg");
   await page.waitForResponse(res => res.url() === "https://dkhpapi.uit.edu.vn/courses")
   await delay(1500);
-  await reloadInIntervalsUntil(page, INTERUPT_INTERVAL, new Date("2024-08-15T16:30:00")); // avoid cookie timeouts
+  // await reloadInIntervalsUntil(page, INTERUPT_INTERVAL, new Date("2024-08-15T16:30:00")); // avoid cookie timeouts
 
 
   while (true) {
