@@ -123,4 +123,4 @@ dist
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-./dkhp.config.json
+dkhp.config.json
