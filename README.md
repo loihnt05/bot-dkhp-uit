@@ -16,15 +16,16 @@ cp example.dkhp.config.json dkhp.config.json
 
 ```jsonc
 {
-    "username": "23520000", // MSSV
-    "password": "your extremely secure password", // MK
-    "classes": [ // Mã lớp cần đăng ký
-        "SE347.P12",
-        "SE347.P12.1",
-        "SS006.P18",
-        "SS008.P12",
-        "or other any class code"
-    ]
+  "username": "23520000", // MSSV
+  "password": "your extremely secure password", // MK
+  "classes": [
+    // Mã lớp cần đăng ký
+    "SE347.P12",
+    "SE347.P12.1",
+    "SS006.P18",
+    "SS008.P12",
+    "or other any class code",
+  ],
 }
 ```
 

@@ -1,13 +1,13 @@
-import { chromium, devices, Page } from 'playwright';
-import assert from 'node:assert';
-import { DateTime } from 'luxon';
+import { chromium, devices, Page } from "playwright";
+import assert from "node:assert";
+import { DateTime } from "luxon";
 
-import DKHPConfig from './config'
+import DKHPConfig from "./config";
 const config: DKHPConfig = require("../dkhp.config.json");
 const INTERUPT_INTERVAL: number = 3 * 60 * 1000;
 
 function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function registerClass(page: Page, className: string): Promise<boolean> {
@@ -15,7 +15,7 @@ async function registerClass(page: Page, className: string): Promise<boolean> {
     .getByRole("table")
     .locator("tr")
     .filter({ has: page.locator("td").getByText(className, { exact: true }) })
-    .getByRole('checkbox');
+    .getByRole("checkbox");
   if (await ele.isDisabled()) return false;
   await ele.check();
   return true;
@@ -23,12 +23,18 @@ async function registerClass(page: Page, className: string): Promise<boolean> {
 
 async function confirmRegistration(page: Page): Promise<void> {
   await page.getByRole("button").getByText("Đăng ký").click();
-  await page.waitForResponse(res => {
-    return res.url() === "https://dkhpapi.uit.edu.vn/courses-waiting-processing";
-  })
+  await page.waitForResponse((res) => {
+    return (
+      res.url() === "https://dkhpapi.uit.edu.vn/courses-waiting-processing"
+    );
+  });
 }
 
-async function reloadInIntervalsUntil(page: Page, interval: number, time: Date) {
+async function reloadInIntervalsUntil(
+  page: Page,
+  interval: number,
+  time: Date,
+) {
   let diff = time.valueOf() - Date.now().valueOf();
   if (diff < 0) return;
   let totalInterval = Math.trunc(diff / INTERUPT_INTERVAL);
@@ -45,25 +51,26 @@ async function reloadInIntervalsUntil(page: Page, interval: number, time: Date) 
 
 async function main() {
   const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext(devices['iPhone 11']);
+  const context = await browser.newContext(devices["iPhone 11"]);
   const page = await context.newPage();
 
-  await page.goto('https://dkhp.uit.edu.vn');
+  await page.goto("https://dkhp.uit.edu.vn");
   await page.getByLabel("Mã sinh viên").fill(config.username);
   await page.getByLabel("Mật khẩu").fill(config.password);
   await page.getByRole("button").getByText("Đăng nhập").click();
-  await page.waitForLoadState("networkidle")
+  await page.waitForLoadState("networkidle");
   await page.goto("https://dkhp.uit.edu.vn/app/reg");
-  await page.waitForResponse(res => res.url() === "https://dkhpapi.uit.edu.vn/courses")
+  await page.waitForResponse(
+    (res) => res.url() === "https://dkhpapi.uit.edu.vn/courses",
+  );
   await delay(1500);
   // await reloadInIntervalsUntil(page, INTERUPT_INTERVAL, new Date("2024-08-15T16:30:00")); // avoid cookie timeouts
-
 
   while (true) {
     try {
       let ok = false;
       for (const sub of config.classes) {
-        console.log(`registering ${sub}`)
+        console.log(`registering ${sub}`);
         if (await registerClass(page, sub)) {
           ok = true;
           console.log(`registered ${sub} successfully`);
@@ -81,9 +88,11 @@ async function main() {
     }
     console.log("continuing next try");
     await page.reload();
-    await page.waitForResponse(res => res.url() === "https://dkhpapi.uit.edu.vn/courses")
+    await page.waitForResponse(
+      (res) => res.url() === "https://dkhpapi.uit.edu.vn/courses",
+    );
     await delay(3000);
   }
 }
 
-main()
+main();
