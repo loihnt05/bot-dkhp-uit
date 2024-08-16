@@ -1,9 +1,8 @@
 import { chromium, devices, Page } from "playwright";
-import assert from "node:assert";
-import { DateTime } from "luxon";
+import { DKHPConfig, defaultConfig } from "./config";
 
-import DKHPConfig from "./config";
-const config: DKHPConfig = require("../dkhp.config.json");
+const userConfig: DKHPConfig = require("../dkhp.config.json");
+const config = { ...defaultConfig, ...userConfig };
 const INTERUPT_INTERVAL: number = 3 * 60 * 1000;
 
 function delay(ms: number) {
@@ -64,7 +63,12 @@ async function main() {
     (res) => res.url() === "https://dkhpapi.uit.edu.vn/courses",
   );
   await delay(1500);
-  // await reloadInIntervalsUntil(page, INTERUPT_INTERVAL, new Date("2024-08-15T16:30:00")); // avoid cookie timeouts
+  if (userConfig.timer ?? false) {
+    if (!config.startTime)
+      throw new Error("configuration error: startTime is not provided");
+    const beginTime = new Date(config.startTime);
+    await reloadInIntervalsUntil(page, INTERUPT_INTERVAL, new Date(beginTime)); // avoid cookie timeouts
+  }
 
   while (true) {
     try {

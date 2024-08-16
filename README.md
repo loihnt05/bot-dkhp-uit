@@ -26,6 +26,10 @@ cp example.dkhp.config.json dkhp.config.json
     "SS008.P12",
     "or other any class code",
   ],
+
+  "timer": "false", // Tính năng tự động hẹn giờ bắt đầu
+  // Nếu tự động hẹn giờ bắt đầu được bật thì vào đúng thời gian này bot sẽ bắt đầu chạy
+  "startTime": "2024-01-01T00:00:00" // 01/01/2024 lúc 00:00:00 (ISO 8601)
 }
 ```
 
@@ -43,5 +47,5 @@ npm run run
 
 ## Tính năng
 
-- [ ] Tự động bắt đầu khi đúng thời gian
+- [x] Tự động bắt đầu khi đúng thời gian
 - [ ] Tự động exit khi thành công
