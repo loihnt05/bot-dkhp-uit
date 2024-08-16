@@ -28,11 +28,16 @@ cp example.dkhp.config.json dkhp.config.json
 }
 ```
 
+3. Cài đặt các dependencies
+
+```sh
+npx playwright install && npm install
+```
 
 4. Bắt đầu chạy
 
 ```sh
-npm install && npm run run
+npm run run
 ```
 
 ## Tính năng
