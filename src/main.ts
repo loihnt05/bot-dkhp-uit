@@ -67,7 +67,7 @@ async function main() {
     if (!config.startTime)
       throw new Error("configuration error: startTime is not provided");
     const beginTime = new Date(config.startTime);
-    await reloadInIntervalsUntil(page, INTERUPT_INTERVAL, new Date(beginTime)); // avoid cookie timeouts
+    await reloadInIntervalsUntil(page, INTERUPT_INTERVAL, beginTime); // avoid cookie timeouts
   }
 
   while (true) {
