@@ -91,11 +91,11 @@ async function main() {
       console.log("failed to register, retrying");
     }
     console.log("continuing next try");
+    await delay(3000);
     await page.reload();
     await page.waitForResponse(
       (res) => res.url() === "https://dkhpapi.uit.edu.vn/courses",
-    );
-    await delay(3000);
+    );    
   }
 }
 
