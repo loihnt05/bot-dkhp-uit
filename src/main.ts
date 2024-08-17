@@ -95,7 +95,8 @@ async function main() {
     await page.reload();
     await page.waitForResponse(
       (res) => res.url() === "https://dkhpapi.uit.edu.vn/courses",
-    );    
+    );
+    await delay(1000);
   }
 }
 
