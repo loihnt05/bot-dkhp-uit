@@ -45,7 +45,11 @@ async function reloadInIntervalsUntil(
     const endTime = performance.now()
     diff -= endTime - startTime;
   }
-  if (diff < 0) return;
+
+  if (diff < 0) {
+    page.reload();
+    return;
+  }
 
   console.log(`sleeping for ${diff}ms`);
   await delay(diff + 100); // exact time could cause some problems
