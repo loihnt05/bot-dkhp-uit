@@ -64,11 +64,15 @@ async function getCourses(page: Page) {
 
 async function login(page: Page) {
   if (page.url() === "https://dkhp.uit.edu.vn/app") return;
-  await page.goto("https://dkhp.uit.edu.vn");
+  await page.goto("https://dkhp.uit.edu.vn", {
+    timeout: 1000,
+  });
   await page.getByLabel("Mã sinh viên").fill(config.username);
   await page.getByLabel("Mật khẩu").fill(config.password);
   await page.getByRole("button").getByText("Đăng nhập").click();
-  await page.waitForLoadState("networkidle");
+  await page.waitForLoadState("networkidle", {
+    timeout: 1000,
+  });
   if (page.url() !== "https://dkhp.uit.edu.vn/app") {
     throw new Error("login failed");
   }
