@@ -8,6 +8,8 @@
     "SS008.P12",
     "or other any class code"
   ],
+  "loginTries": 10,
+  "retryDelay": 3000,
   "timer": "false",
   "startTime": "2024-01-01T00:00:00"
 }

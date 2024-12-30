@@ -48,20 +48,61 @@ async function reloadInIntervalsUntil(
   page.reload();
 }
 
-async function main() {
-  const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext(devices["iPhone 11"]);
-  const page = await context.newPage();
+async function getCourses(page: Page) {
+  await page.waitForResponse(
+    (res) => res.url() === "https://dkhpapi.uit.edu.vn/courses",
+    {
+      timeout: 1000,
+    },
+  );
+  console.log("registration page loaded");
+}
 
+async function login(page: Page) {
   await page.goto("https://dkhp.uit.edu.vn");
   await page.getByLabel("Mã sinh viên").fill(config.username);
   await page.getByLabel("Mật khẩu").fill(config.password);
   await page.getByRole("button").getByText("Đăng nhập").click();
   await page.waitForLoadState("networkidle");
+  if (page.url() !== "https://dkhp.uit.edu.vn/app") {
+    throw new Error("login failed");
+  }
   await page.goto("https://dkhp.uit.edu.vn/app/reg");
-  await page.waitForResponse(
-    (res) => res.url() === "https://dkhpapi.uit.edu.vn/courses",
-  );
+  console.log("login successful, navigated to registration page");
+}
+
+async function main() {
+  const browser = await chromium.launch({ headless: false });
+  const context = await browser.newContext(devices["iPhone 11"]);
+  const page = await context.newPage();
+
+  let i: number;
+  for (let i = 0; i < config.loginTries; ++i) {
+    try {
+      await login(page);
+      break;
+    } catch (e) {
+      await delay(config.retryDelay);
+      console.error("Failed to login: ", e);
+    }
+  }
+  if (i === config.loginTries) {
+    console.error("Failed to login after 10 tries, exiting");
+    return;
+  }
+
+  while (true) {
+    try {
+      await getCourses(page);
+      break;
+    } catch (e) {
+      await delay(config.retryDelay);
+      page.reload();
+      console.error("Failed to get courses: ", e);
+      console.log("retrying");
+    }
+  }
+
   await delay(1500);
   if (userConfig.timer ?? false) {
     if (!config.startTime)
@@ -96,7 +137,7 @@ async function main() {
     await page.waitForResponse(
       (res) => res.url() === "https://dkhpapi.uit.edu.vn/courses",
     );
-    await delay(1000);
+    await delay(config.retryDelay);
   }
 }
 
