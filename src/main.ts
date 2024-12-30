@@ -36,15 +36,19 @@ async function reloadInIntervalsUntil(
 ) {
   let diff = time.valueOf() - Date.now().valueOf();
   if (diff < 0) return;
-  let totalInterval = Math.trunc(diff / INTERUPT_INTERVAL);
-  const remaining = diff % INTERUPT_INTERVAL;
-  for (let i = 0; i < totalInterval; ++i) {
-    console.log(`waiting... (interval number ${i + 1}/${totalInterval})`);
+
+  for (; diff > INTERUPT_INTERVAL; diff -= INTERUPT_INTERVAL) {
+    console.log(`${diff}ms left`);
     await delay(INTERUPT_INTERVAL);
+    const startTime = performance.now()
     page.reload();
+    const endTime = performance.now()
+    diff -= endTime - startTime;
   }
-  console.log(`sleeping for ${remaining}ms`);
-  await delay(remaining + 100); // exact time could cause some problems
+  if (diff < 0) return;
+
+  console.log(`sleeping for ${diff}ms`);
+  await delay(diff + 100); // exact time could cause some problems
   page.reload();
 }
 
@@ -59,6 +63,7 @@ async function getCourses(page: Page) {
 }
 
 async function login(page: Page) {
+  if (page.url() === "https://dkhp.uit.edu.vn/app") return;
   await page.goto("https://dkhp.uit.edu.vn");
   await page.getByLabel("Mã sinh viên").fill(config.username);
   await page.getByLabel("Mật khẩu").fill(config.password);
@@ -67,8 +72,6 @@ async function login(page: Page) {
   if (page.url() !== "https://dkhp.uit.edu.vn/app") {
     throw new Error("login failed");
   }
-  await page.goto("https://dkhp.uit.edu.vn/app/reg");
-  console.log("login successful, navigated to registration page");
 }
 
 async function main() {
@@ -90,6 +93,9 @@ async function main() {
     console.error("Failed to login after 10 tries, exiting");
     return;
   }
+
+  await page.goto("https://dkhp.uit.edu.vn/app/reg");
+  console.log("login successful, navigated to registration page");
 
   while (true) {
     try {
