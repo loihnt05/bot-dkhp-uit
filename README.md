@@ -26,6 +26,8 @@ cp example.dkhp.config.json dkhp.config.json
     "SS008.P12",
     "or other any class code",
   ],
+  "loginTries": 10, // Số lần tự động đăng nhập lại nếu đăng nhập thất bại
+  "retryDelay": 3000, // Thời gian cách nhau giữa những lần f5 :)
 
   "timer": "false", // Tính năng tự động hẹn giờ bắt đầu
   // Nếu tự động hẹn giờ bắt đầu được bật thì vào đúng thời gian này bot sẽ bắt đầu chạy
