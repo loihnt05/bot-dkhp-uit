@@ -145,7 +145,7 @@ async function main() {
         let ok = false;
         for (const sub of config.classes) {
           console.log(`registering ${sub}`);
-          if (await registerClass(page, sub)) {
+          if (await registerClass(page, sub.trim())) {
             ok = true;
             console.log(`registered ${sub} successfully`);
           } else {
