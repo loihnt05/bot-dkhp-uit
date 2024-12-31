@@ -105,6 +105,14 @@ async function main() {
   await page.goto("https://dkhp.uit.edu.vn/app/reg");
   console.log("login successful, navigated to registration page");
 
+  await delay(1500);
+  if (userConfig.timer ?? false) {
+    if (!config.startTime)
+      throw new Error("configuration error: startTime is not provided");
+    const beginTime = new Date(config.startTime);
+    await reloadInIntervalsUntil(page, INTERUPT_INTERVAL, beginTime); // avoid cookie timeouts
+  }
+
   while (true) {
     try {
       await getCourses(page);
@@ -117,13 +125,6 @@ async function main() {
     }
   }
 
-  await delay(1500);
-  if (userConfig.timer ?? false) {
-    if (!config.startTime)
-      throw new Error("configuration error: startTime is not provided");
-    const beginTime = new Date(config.startTime);
-    await reloadInIntervalsUntil(page, INTERUPT_INTERVAL, beginTime); // avoid cookie timeouts
-  }
 
   while (true) {
     try {
