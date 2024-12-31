@@ -14,8 +14,6 @@ try {
   process.exit(1);
 }
 
-
-
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -175,5 +173,17 @@ async function main() {
   }
 }
 
+// ensure it will always running
+async function mainWrapper() {
+  while (true) {
+    try {
+      await main();
+      return;
+    } catch (e) {
+      console.error("Failed to run main: ", e);
+    }
+  }
+}
+
 console.log(`Running with config: ${JSON.stringify(config, null, 2)}`);
-main();
+mainWrapper();
