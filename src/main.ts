@@ -1,9 +1,20 @@
 import { chromium, devices, Page } from "playwright";
 import { DKHPConfig, defaultConfig } from "./config";
-
-const userConfig: DKHPConfig = require("../dkhp.config.json");
-const config = { ...defaultConfig, ...userConfig };
+import fs from "fs";
 const INTERUPT_INTERVAL: number = 3 * 60 * 1000;
+const CONFIG_FILE = "dkhp.config.json";
+
+let config = defaultConfig;
+try {
+  const configStr = fs.readFileSync(CONFIG_FILE, "utf-8");
+  const userConfig: DKHPConfig = JSON.parse(configStr);
+  config = { ...config, ...userConfig };
+} catch (e) {
+  console.error(`Failed to read config file (${CONFIG_FILE}): ${e.message}`);
+  process.exit(1);
+}
+
+
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -111,7 +122,7 @@ async function main() {
   console.log("login successful, navigated to registration page");
 
   await delay(1500);
-  if (userConfig.timer ?? false) {
+  if (config.timer ?? false) {
     if (!config.startTime)
       throw new Error("configuration error: startTime is not provided");
     const beginTime = new Date(config.startTime);
@@ -164,4 +175,5 @@ async function main() {
   }
 }
 
+console.log(`Running with config: ${JSON.stringify(config, null, 2)}`);
 main();
