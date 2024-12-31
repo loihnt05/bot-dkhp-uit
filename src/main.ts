@@ -132,31 +132,35 @@ async function main() {
 
   while (true) {
     try {
-      let ok = false;
-      for (const sub of config.classes) {
-        console.log(`registering ${sub}`);
-        if (await registerClass(page, sub)) {
-          ok = true;
-          console.log(`registered ${sub} successfully`);
-        } else {
-          console.log(`couldn't register ${sub}`);
+      try {
+        let ok = false;
+        for (const sub of config.classes) {
+          console.log(`registering ${sub}`);
+          if (await registerClass(page, sub)) {
+            ok = true;
+            console.log(`registered ${sub} successfully`);
+          } else {
+            console.log(`couldn't register ${sub}`);
+          }
         }
+        if (ok) {
+          console.log("confirming registration");
+          await confirmRegistration(page);
+        }
+      } catch (e) {
+        console.log(e);
+        console.log("failed to register, retrying");
       }
-      if (ok) {
-        console.log("confirming registration");
-        await confirmRegistration(page);
-      }
+      console.log("continuing next try");
+      await delay(3000);
+      await page.reload();
+      await page.waitForResponse(
+        (res) => res.url() === "https://dkhpapi.uit.edu.vn/courses",
+      );
+      await delay(config.retryDelay);
     } catch (e) {
-      console.log(e);
-      console.log("failed to register, retrying");
+      console.error("Failed to register: ", e);
     }
-    console.log("continuing next try");
-    await delay(3000);
-    await page.reload();
-    await page.waitForResponse(
-      (res) => res.url() === "https://dkhpapi.uit.edu.vn/courses",
-    );
-    await delay(config.retryDelay);
   }
 }
 
