@@ -15,7 +15,12 @@ async function registerClass(page: Page, className: string): Promise<boolean> {
     .locator("tr")
     .filter({ has: page.locator("td").getByText(className, { exact: true }) })
     .getByRole("checkbox");
-  if (await ele.isDisabled()) return false;
+  try {
+    if (await ele.isDisabled({ timeout: 1000 })) return false;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
   await ele.check();
   return true;
 }
@@ -40,9 +45,9 @@ async function reloadInIntervalsUntil(
   for (; diff > INTERUPT_INTERVAL; diff -= INTERUPT_INTERVAL) {
     console.log(`${diff}ms left`);
     await delay(INTERUPT_INTERVAL);
-    const startTime = performance.now()
+    const startTime = performance.now();
     page.reload();
-    const endTime = performance.now()
+    const endTime = performance.now();
     diff -= endTime - startTime;
   }
 
@@ -124,7 +129,6 @@ async function main() {
       console.log("retrying");
     }
   }
-
 
   while (true) {
     try {
