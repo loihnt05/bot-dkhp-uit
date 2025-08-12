@@ -1,8 +1,9 @@
+#!/usr/bin/env node
 import { chromium, devices, Page } from "playwright";
 import { DKHPConfig, defaultConfig } from "./config";
 import fs from "fs";
 const INTERUPT_INTERVAL: number = 3 * 60 * 1000;
-const CONFIG_FILE = "dkhp.config.json";
+const CONFIG_FILE = process.env.CONFIG_FILE || "dkhp.config.json";
 
 let config = defaultConfig;
 try {

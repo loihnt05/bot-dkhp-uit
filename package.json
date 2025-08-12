@@ -1,4 +1,6 @@
 {
+  "name": "sex-cli",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "nodemon",
@@ -17,6 +19,10 @@
   },
   "dependencies": {
     "@formkit/tempo": "^0.1.2",
+    "commander": "^14.0.0",
     "luxon": "^3.5.0"
+  },
+  "bin": {
+    "sex": "dist/main.js"
   }
 }

@@ -11,6 +11,6 @@
     "baseUrl": "./",
     "rootDir": "./src"
   },
-  "lib": ["ESNext"],
-  "include": ["src/**/*.ts"]
+  "lib": ["ESNext"],  "include": ["src/**/*.ts"]
 }
+  
